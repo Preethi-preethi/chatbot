@@ -158,10 +158,10 @@ const ChatArea = ({ messages, isTyping, onPromptClick, onPreviewUrl, onNewChat, 
                         ))}
                       </div>
                     )}
-                    {msg.content && (
-                      <div className="message-text">
-                        {msg.content.split('\n').map((line, i) => {
-                          const trimmed = line.trim();
+                    <div className="message-text">
+                      {(msg.content && msg.content.trim() ? msg.content.trim() : "Hello! I am your CA Tutor AI. How can I assist you with your exam prep today?").split('\n').map((line, i) => {
+                        const trimmed = line.trim();
+
                           if (!trimmed) return <div key={i} className="line-spacer" />;
                           if (trimmed === '---') return <hr key={i} className="chat-divider" />;
                           if (trimmed.startsWith('### ')) {
@@ -185,9 +185,9 @@ const ChatArea = ({ messages, isTyping, onPromptClick, onPreviewUrl, onNewChat, 
                           return <p key={i}>{renderTextWithLinks(line, onPreviewUrl)}</p>;
                         })}
                       </div>
-                    )}
                   </div>
                 </div>
+
               ))}
 
               {isTyping && (

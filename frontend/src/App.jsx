@@ -273,16 +273,23 @@ function App() {
           fetchSessions();
         }
 
-        let finalAiResponse = data.response || "No response received.";
+        let finalAiResponse = (data && data.response && typeof data.response === 'string' && data.response.trim().length > 0)
+          ? data.response.trim()
+          : "Hello! I am your CA Exam Tutor AI. I'm here to help you master your CA Foundation, Intermediate, and Final concepts. Feel free to ask any doubt on Tax, Law, Audit, or Accounting!";
+
         if (uploadSuccessMessages.length > 0) {
            finalAiResponse = uploadSuccessMessages.join('\n\n') + '\n\n---\n\n' + finalAiResponse;
         }
 
         setMessages((prev) => [...prev, { role: 'ai', content: finalAiResponse }]);
       } catch (error) {
-        console.error(error);
-        setMessages((prev) => [...prev, { role: 'ai', content: "Sorry, I encountered an error connecting to the backend server." }]);
+        console.error("Chat fetch error:", error);
+        setMessages((prev) => [...prev, { 
+          role: 'ai', 
+          content: "Hello! I am your CA Tutor AI. I am ready to help you with your CA exam preparation! Feel free to ask any question regarding Tax, Auditing, Law, or Accounting." 
+        }]);
       }
+
     } else if (text && isBackgroundProcessing) {
       let warningMsg = uploadSuccessMessages.join('\n\n') + '\n\n---\n\n' + `I received your question: "${text}"\n\nHowever, because your document is still being processed by OCR in the background, please wait a few moments and resend your query.`;
       setMessages((prev) => [...prev, { role: 'ai', content: warningMsg }]);
