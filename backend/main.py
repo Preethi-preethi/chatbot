@@ -86,16 +86,22 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
 AVAILABLE_MODELS = [
     {"id": "groq:llama-3.1-8b", "name": "Llama 3.1 8B (Cloud)", "provider": "Groq Cloud", "ram": "0 MB RAM", "badge": "⚡ Ultra Fast"},
     {"id": "groq:llama-3.3-70b", "name": "Llama 3.3 70B (Cloud)", "provider": "Groq Cloud", "ram": "0 MB RAM", "badge": "🧠 Ultra Smart"},
-    {"id": "groq:mixtral-8x7b", "name": "Mixtral 8x7B (Cloud)", "provider": "Groq Cloud", "ram": "0 MB RAM", "badge": "🌟 High Logic"},
-    {"id": "ollama:llama3.2:1b", "name": "Llama 3.2 1B (Local)", "provider": "Ollama Local", "ram": "1.3 GB RAM", "badge": "💻 Offline 1B"},
-    {"id": "ollama:llama3.2:3b", "name": "Llama 3.2 3B (Local)", "provider": "Ollama Local", "ram": "2.2 GB RAM", "badge": "💻 Offline 3B"},
-    {"id": "ollama:mistral:7b", "name": "Mistral 7B (Local)", "provider": "Ollama Local", "ram": "4.4 GB RAM", "badge": "⚡ 16GB RAM"},
-    {"id": "ollama:qwen2.5:7b", "name": "Qwen 2.5 7B (Local)", "provider": "Ollama Local", "ram": "4.7 GB RAM", "badge": "🎯 16GB RAM"},
-    {"id": "ollama:deepseek-r1:8b", "name": "DeepSeek R1 8B (Local)", "provider": "Ollama Local", "ram": "4.9 GB RAM", "badge": "🧠 16GB RAM"}
+    {"id": "groq:mixtral-8x7b", "name": "Mixtral 8x7B (Cloud)", "provider": "Groq Cloud", "ram": "0 MB RAM", "badge": "🌟 High Logic"}
 ]
 
-# Groq Cloud API Setup
-groq_api_key = os.getenv("GROQ_API_KEY")
+
+import urllib.request
+
+def check_ollama_alive(base_url="http://localhost:11434"):
+    for test_url in [base_url, "http://127.0.0.1:11434", "http://localhost:11434"]:
+        try:
+            req = urllib.request.Request(test_url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=1.0) as response:
+                if response.status == 200:
+                    return True, test_url
+        except Exception:
+            continue
+    return False, base_url
 
 def get_llm_instance(model_id: Optional[str] = None):
     model_id = model_id or os.getenv("DEFAULT_MODEL", "groq:llama-3.1-8b")
@@ -103,17 +109,23 @@ def get_llm_instance(model_id: Optional[str] = None):
     if model_id.startswith("ollama:"):
         ollama_name = model_id.replace("ollama:", "")
         ollama_base = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        if ChatOllama is not None:
-            return ChatOllama(model=ollama_name, temperature=0.2, base_url=ollama_base)
-        try:
-            from langchain_ollama import ChatOllama as LCOllama
-            return LCOllama(model=ollama_name, temperature=0.2, base_url=ollama_base)
-        except Exception:
-            from langchain_community.llms.ollama import Ollama
-            return Ollama(model=ollama_name, temperature=0.2, base_url=ollama_base)
+        is_alive, working_url = check_ollama_alive(ollama_base)
+        
+        if is_alive:
+            try:
+                if ChatOllama is not None:
+                    return ChatOllama(model=ollama_name, temperature=0.2, base_url=working_url)
+                from langchain_ollama import ChatOllama as LCOllama
+                return LCOllama(model=ollama_name, temperature=0.2, base_url=working_url)
+            except Exception as e:
+                print(f"Ollama model '{ollama_name}' failed ({e}). Auto-fallback to Groq Cloud.")
+                model_id = "groq:llama-3.1-8b"
+        else:
+            print(f"Ollama server is offline. Auto-fallback to Groq Cloud Llama 3.1 8B.")
+            model_id = "groq:llama-3.1-8b"
 
-    
-    # Groq Cloud fallback
+    # Groq Cloud API Models (Runs 100% in Groq Cloud - Zero local RAM)
+    groq_api_key = os.getenv("GROQ_API_KEY")
     groq_model_name = "llama-3.1-8b-instant"
     if "70b" in model_id:
         groq_model_name = "llama-3.3-70b-versatile"
@@ -125,6 +137,8 @@ def get_llm_instance(model_id: Optional[str] = None):
         temperature=0.2,
         api_key=groq_api_key
     )
+
+
 
 llm = get_llm_instance()
 

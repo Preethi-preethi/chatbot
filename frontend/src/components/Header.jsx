@@ -20,13 +20,9 @@ const Header = ({
   const defaultModels = [
     { id: "groq:llama-3.1-8b", name: "Llama 3.1 8B (Cloud)", ram: "Fast" },
     { id: "groq:llama-3.3-70b", name: "Llama 3.3 70B (Cloud)", ram: "Pro" },
-    { id: "groq:mixtral-8x7b", name: "Mixtral 8x7B (Cloud)", ram: "Pro" },
-    { id: "ollama:llama3.2:1b", name: "Llama 3.2 1B (Local)", ram: "1.3 GB" },
-    { id: "ollama:llama3.2:3b", name: "Llama 3.2 3B (Local)", ram: "2.2 GB" },
-    { id: "ollama:qwen2.5:7b", name: "Qwen 2.5 7B (Local)", ram: "4.7 GB" },
-    { id: "ollama:deepseek-r1:8b", name: "DeepSeek R1 8B (Local)", ram: "4.9 GB" },
-    { id: "ollama:mistral:7b", name: "Mistral 7B (Local)", ram: "4.4 GB" }
+    { id: "groq:mixtral-8x7b", name: "Mixtral 8x7B (Cloud)", ram: "Pro" }
   ];
+
 
   const availableModels = modelsList.length > 0 ? modelsList : defaultModels;
   const currentModelObj = availableModels.find(m => m.id === activeModel) || availableModels[0];
