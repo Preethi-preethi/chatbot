@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* 2026 Ultra-Premium Executive Light Glass Theme */
+  --bg-dark-base: #f8fafc; /* Crisp Light Slate Base */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e2e8f0;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-glass-card: rgba(255, 255, 255, 0.95);
+  --bg-glass-hover: rgba(248, 250, 252, 0.95);
+
+  --text-primary: #0f172a;   /* Deep Slate */
+  --text-secondary: #334155; /* Charcoal Slate */
+  --text-tertiary: #64748b;  /* Muted Slate */
+  --text-muted: #94a3b8;     /* Light Muted */
+
+  /* Premium Accent Palette */
+  --accent-primary: #4f46e5; /* Royal Indigo */
+  --accent-hover: #4338ca;
+  --accent-cyan: #0284c7;   /* Rich Sky Blue */
+  --accent-violet: #7c3aed; /* Deep Royal Violet */
+  --accent-gold: #d97706;   /* Gold Amber for Badges */
+  --accent-glow: rgba(79, 70, 229, 0.15);
+  --accent-glow-strong: rgba(79, 70, 229, 0.35);
+
+  --border-subtle: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-glow: rgba(79, 70, 229, 0.35);
+
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.12), 0 8px 12px -4px rgba(15, 23, 42, 0.04);
+  --shadow-neon: 0 8px 24px rgba(79, 70, 229, 0.2), 0 2px 6px rgba(2, 132, 199, 0.15);
+
+  /* CA Stage & Status Colors */
+  --success: #059669; /* Emerald Green */
+  --warning: #d97706; /* Amber Gold */
+  --danger: #dc2626;  /* Crimson Red */
+
+  color-scheme: light;
+  color: var(--text-primary);
+  background-color: var(--bg-dark-base);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-dark-base);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+/* Custom Light Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 70, 229, 0.5);
+}
+
+/* Light Glassmorphism utilities */
+.glass-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.glass-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Base button */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+

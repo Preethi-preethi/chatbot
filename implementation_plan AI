@@ -1,0 +1,59 @@
+# Complete Architecture: CA Assist Chatbot (Hybrid Model)
+
+Based on your system specifications (8GB RAM, Intel HD Graphics with 128MB VRAM), building a 100% local AI will freeze your computer. Therefore, we are proceeding with the **Hybrid Architecture**. This gives you the speed and intelligence of a massive supercomputer, while keeping all your documents stored locally on your own hard drive.
+
+## System Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph "Your Laptop (Localhost)"
+        UI[React Frontend UI]
+        API[FastAPI Backend Server]
+        EMB[Local Embedding Model\nall-MiniLM-L6-v2]
+        DB[(ChromaDB\nLocal Vector Store)]
+        
+        UI <-->|User Chat & UI| API
+        API -->|1. Upload Document| EMB
+        EMB -->|2. Store Vectors| DB
+        API -->|3. Search Vectors| DB
+    end
+
+    subgraph "The Cloud (Free API)"
+        GROQ[Groq Cloud API\nLlama-3 70B Model]
+    end
+
+    API <-->|4. Send Prompt + Found Context\nReceive Streamed Answer| GROQ
+```
+
+## The 5 Core Components
+
+### 1. Frontend (The Face)
+- **Tech:** React, Vite, Vanilla CSS.
+- **What it does:** This is the beautiful, dark-mode UI we already built. It handles the user interface, chat bubbles, and document uploads.
+
+### 2. Backend Server (The Brain's Manager)
+- **Tech:** Python, FastAPI.
+- **What it does:** Runs locally on your PC. It receives messages from the frontend, searches the database for relevant CA rules, and talks to the Cloud AI to get the final answer.
+
+### 3. Vector Database (The Filing Cabinet)
+- **Tech:** ChromaDB (Running locally).
+- **What it does:** When you upload Income Tax Acts or Audit Manuals, this database stores them on your local hard drive. It uses a tiny amount of RAM (perfect for your 8GB PC) and allows the system to instantly search through thousands of pages of tax laws.
+
+### 4. Embedding Model (The Translator)
+- **Tech:** HuggingFace `all-MiniLM-L6-v2`.
+- **What it does:** Runs locally. It translates your English text into mathematical numbers (vectors) so the Vector Database can search them. It is extremely small and won't slow down your PC.
+
+### 5. Large Language Model (The Brain)
+- **Tech:** Groq API (Running Llama-3 70B).
+- **What it does:** This is the only part that doesn't run on your laptop. Because your laptop lacks a dedicated GPU, we use Groq's free cloud computers. When you ask a question, your local server sends the question + the relevant tax rules to Groq. Groq reads it, formulates a perfect CA-level answer in milliseconds, and sends it back to your screen.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]  
+> This architecture is perfectly tailored to your hardware and will run incredibly fast. To begin building this, I need you to do one thing:
+> 
+> 1. Go to [console.groq.com](https://console.groq.com/), create a free account, and click **Create API Key**.
+> 
+> Are you ready for me to begin writing the Python Backend code based on this architecture?
