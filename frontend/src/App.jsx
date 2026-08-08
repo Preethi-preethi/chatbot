@@ -13,8 +13,17 @@ import FeatureHubModal from './components/FeatureHubModal';
 import ProfileModal from './components/ProfileModal';
 import logoImg from './assets/logo.png';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  const host = typeof window !== 'undefined' ? (window.location.hostname || 'localhost') : 'localhost';
+  return `http://${host}:8000/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 const LOCAL_STORAGE_KEY = 'ca_chat_sessions_cache';
+
 
 
 function App() {
